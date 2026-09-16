@@ -13,7 +13,7 @@ const ROOM = 'main-table';
 const SMALL_BLIND = 10;
 const BIG_BLIND = 20;
 const STARTING_STACK = 1000;
-const QUICK_MESSAGES = ['请尽快行动 ⏱', '轮到你了！', '下一手准备了吗？', '好牌！'];
+const QUICK_MESSAGES = ['请尽快行动 ⏱', '轮到你了！', '下一手准备了吗？', '好牌！', '牛逼！'];
 
 if (!ROOM_PASSWORD) {
   throw new Error('ROOM_PASSWORD is required. Set it in your environment before starting the server.');
