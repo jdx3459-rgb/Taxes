@@ -9,7 +9,7 @@ const io = new Server(httpServer);
 const PORT = Number(process.env.PORT || 3000);
 const ROOM_PASSWORD = process.env.ROOM_PASSWORD;
 const ROOM = 'main-table';
-const SMALL_BLIND = 10;
+const SMALL_BLIND = 10; 
 const BIG_BLIND = 20;
 const STARTING_STACK = 1000;
 
@@ -110,7 +110,14 @@ function publicState(viewerId) {
     })() : { seated: false }
   };
 }
-function broadcast() { for (const socket of io.in(ROOM).sockets.values()) socket.emit('state', publicState(socket.id)); }
+function broadcast() {
+  const roomMembers = io.sockets.adapter.rooms.get(ROOM);
+  if (!roomMembers) return;
+  for (const socketId of roomMembers) {
+    const socket = io.sockets.sockets.get(socketId);
+    if (socket) socket.emit('state', publicState(socket.id));
+  }
+}
 function announce(message) { if (game.hand) game.hand.message = message; broadcast(); }
 function resetStreet() { playersInHand().forEach(player => { player.streetBet = 0; player.acted = false; }); game.hand.currentBet = 0; game.hand.minRaise = BIG_BLIND; }
 function dealBoard(count) { game.hand.board.push(...game.hand.deck.splice(0, count)); }
